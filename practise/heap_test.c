@@ -1,2 +1,8 @@
-111111
-11111
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main()
+{
+	 
+}
