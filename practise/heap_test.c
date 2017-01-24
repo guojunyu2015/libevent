@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "public.h"
 
 int nInsert_min_heap(int *arr,int count,int val);
 int nPrint_Bitree(int *arr,int count);
@@ -11,18 +12,66 @@ int main()
 	int iElem_num = 12,i;
 	
 	memset(iHeap_arr,0x00,sizeof(iHeap_arr));
-	
-	/*将iNum_arr数组构建成一个小顶堆并存放在iHeap_arr数组中*/
-//	for(i = 0;i < iElem_num;i++)
-//		nInsert_min_heap(iHeap_arr,i,iNum_arr[i]);
-	
 	printf("排序前序列为:\n");
 	nPrint_Bitree(iNum_arr,iElem_num);	
 	
-//	printf("堆排序结果序列为:\n");
-//	nPrint_Bitree(iHeap_arr,iElem_num);
+	return 0;
+}
+
+/****************************************************
+	函数说明：打印二叉树
+	函数名:	nPrint_Bitree(int *arr,int count)
+	入口参数：arr 存储堆排序数组的指针
+	出/入口参数：count 本次排序前数组中的元素个数
+****************************************************/
+int nPrint_Bitree(int *arr,int count)
+{
+	int iLevel_num = 0;		/*层数*/
+	int iFront_sep_num = 0;	/*一层中开头节点距开头偏移值*/
+	int iNode_sep_num = 0;	/*一层中节点间的偏移值*/
+	int iMax_len;			/*最下面一层节点总长度*/
+	int iMax_node = 1;		/*最下面一层节点个数*/
+	stack stBitree;
 	
-	printf("\n");
+	int iNode_len = 2;		/*单个节点占据的长度,默认为2*/
+	int iNode_sep = 4;		/*最小单元节点间距,即最下面一层的节点*/
+	
+	int tmp;
+	
+	if(count <= 0)
+	{
+		printf("空二叉树无法打印\n");
+		return 0;
+	}
+	/*初始化堆栈*/
+	init_stack(&stBitree);
+	
+	/*计算二叉树的层数*/
+	tmp = count - 1;
+	iLevel_num = 1;
+	while(tmp > 0)
+	{
+		tmp >>= 1;
+		iLevel_num++;
+		iMax_node << 1;
+	}
+	
+	/*计算每一层偏移值*/
+	iMax_len = (iMax_node-1)*iNode_sep + iMax_node*iNode_len;
+	iFront_sep_num = 0;
+	iNode_sep_num = iNode_sep;
+	while(tmp > 0)
+	{
+		/*入栈*/
+		push_stack(&stBitree,iFront_sep_num);
+		push_stack(&stBitree,iNode_sep_num);
+		
+		/*计算下一个偏移值*/
+		iNode_sep_num = (iNode_sep_num - 2)/2 + 2*iNode_len + iNode_sep_num + (iNode_sep_num - 2)/2;
+		iFront_sep_num = 
+	}
+	
+	printf("二叉树节点总数为:%d,层数为:%d\n",count,iLevel_num);
 	return 0;
 }
 
@@ -96,62 +145,5 @@ int nDelete_min_heap(int *arr,int *count,int *val)
 //		
 //	}
 	
-}
-
-/****************************************************
-	函数说明：打印二叉树
-	函数名:	nPrint_Bitree(int *arr,int count)
-	入口参数：arr 存储堆排序数组的指针
-	出/入口参数：count 本次排序前数组中的元素个数
-****************************************************/
-int nPrint_Bitree(int *arr,int count)
-{
-	int i = 1,j = 0,tmp = 1;
-	char aTmp[12+1];
-	char aSpilt_tmp[1024];
-	int iLevel_num = 0;
-	int iLast_node = 1;
-	int iSum_len = 0;
-	
-	memset(aTmp,0x00,sizeof(aTmp));
-	memset(aSpilt_tmp,0x00,sizeof(aSpilt_tmp));
-	strcpy(aTmp,"------");
-	
-	tmp = count;
-	while(tmp > 0)
-	{
-		tmp = tmp / 2;
-		iLevel_num++;
-	}
-	printf("the bitree level num is %d\n",iLevel_num);
-	
-	for(tmp = 0;tmp < iLevel_num -1;tmp++)
-	{
-		iLast_node *= 2;
-	}
-	iSum_len = strlen(aTmp) * iLast_node / 2;
-	printf("the last node is %d,last len is %d\n",iLast_node,iSum_len);
-	tmp = 1;
-	while(i <= count && j < count)
-	{
-		memset(aSpilt_tmp,0x00,sizeof(aSpilt_tmp));
-		memset(aSpilt_tmp,aTmp[0],iSum_len);
-		iSum_len /= 2;
-		while(tmp-- >= 1)
-		{
-			/*计算前面应该打印多少个空格*/
-			printf("%s%3d%s",aSpilt_tmp,arr[j],aSpilt_tmp);
-			j++;
-		}
-		printf("\n\n");
-		
-		if(i*2 > count)
-			i = i*2 - (i*2)%count;
-		else
-			i = i*2 ;
-		
-		tmp = i;
-	}
-	return 0;
 }
 
